@@ -1,70 +1,30 @@
 var express = require('express');
- var router = express.Router();
+var router = express.Router();
 
- var Todo = require('../../models/tables/todos');
+var Todo = require('../../models/tables/todos');
+var todoApi = require('../../models/apis/todosAPI');
 
  router.route('/')
-   .get(function(req, res, next) {
-     Todo.findAsync({}) //findAsync(param1, param2) param1:{} means get all rows, param 2: "" means get all data from those rows
-     .then(function(todos) {
-       res.json(todos); //return json object instead of a view
-     })
-     .catch(next)
-     .error(console.error);
-   })
-   .post(function(req, res, next) {
-    var todo = new Todo();
-    todo.Title = req.body.Title;
-    todo.Description = req.body.Description;
-    todo.saveAsync()
-    .then(function(todo) {
-      console.log("success");
-      res.json({'status': 'success', 'todo': todo});
-    })
-    .catch(function(e) {
-      console.log("fail");
-      res.json({'status': 'error', 'error': e});
-    })
-    .error(console.error);
-  });
+   .get(function(req, res, next){
+   	   	todoApi.getAll(req, res, next);
+   	})
+   .post(function(req, res, next){
+   		todoApi.save(req, res, next);
+   });
  
 router.route('/:id')
  	.get(function(req, res, next) {
- 		Todo.findOneAsync({_id: req.params.id}, {text: 1, done: 1}) //gets these parameters
- 		.then(function(todo) {
- 		res.json(todo);
- 		})
- 		.catch(next)
- 		.error(console.error);
+		todoApi.getbyID(req, res, next);
 	})
 	.put(function(req,res,next){
-		var todo = {};
-		var prop;
-		for (prop in req.body){
-			todo[prop] = req.body[prop];
-		}
-		Todo.updateAsync({_id: req.params.id}, todo)
-		.then(function(updatedTodo){
-			return res.json({'status': 'success', 'todo': updatedTodo});
-		})
-		.catch(function(e){
-			return res.status(400).json({'status': 'fail', 'error': e});
-		});
+		todoApi.updateOne(req, res, next);
 	})
 	.delete(function(req, res, next){
-		Todo.findByIdAndRemoveAsync(req.params.id)
-		.then(function(deletedTodo) {
-			res.json({'status': 'success', 'todo': deletedTodo});
-		})
-		.catch(function(e){
-			res.status(400).json({'status': 'fail', 'error': e});
-		});
+		todoApi.deleteOne(req, res, next);
 	});
 
-testfunction = function(req, res, next){
-	res.render('test', {title: 'Test View'});
-}
+testfunction = function(){
+	return "Yay!";
+};
 
-;
-
-module.exports = router;
+module.exports = testfunction;

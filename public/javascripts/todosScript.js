@@ -1,7 +1,7 @@
 //var $ = require('jquery');
 //var todoTemplate = require("../views/partials/todo.hbs")
 $(function() {
-	$(":button").on('click', addTodo);
+	//$(":button").on('click', addTodo);
 	$(":text").on('keypress',function(e) {
 		var key = e.keyCode;
 		if( key == 13 || key == 169) {
@@ -14,6 +14,7 @@ $(function() {
 	$("li > input:checked").each(function(){
 		$(this).parent().toggleClass('checked');
 	});
+  $('#test_button').on('click', testButton);
 });
 
 var addTodo = function() {
@@ -33,3 +34,14 @@ var addTodo = function() {
      }
    });
  };
+
+ var testButton = function(){
+  console.log("test");
+  $.ajax({
+    url: '/apis/taskListApi/testfunction',
+    data: {},
+    success: function(data){
+      $('#test_label').text(data);
+    }
+  });
+ }

@@ -9,7 +9,7 @@ Promise.promisifyAll(mongoose);
 
 //set the schema based on the database types
 var TodoSchema = new Schema({
-	text: {type: 'String', required: true},
+	text: {type: 'String'},
 	done: {type: 'Boolean'}
 });
 
